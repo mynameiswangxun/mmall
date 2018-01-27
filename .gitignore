@@ -16,6 +16,7 @@ target/
 .classpath
 
 #idea
+out/
 .idea/
 /idea/
 *.ipr
