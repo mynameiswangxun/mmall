@@ -37,8 +37,8 @@
         select count(1) from mmall_user
         where email=#{email}
     </select>
-    <select id="selectQuetionByUsername" resultType="java.lang.String">
-        select question form mmall_user
+    <select id="selectQuetionByUsername" resultType="java.lang.String" parameterType="string">
+        select question from mmall_user
         where username=#{username}
     </select>
     <select id="checkAnswer" resultType="java.lang.Integer" parameterType="map">

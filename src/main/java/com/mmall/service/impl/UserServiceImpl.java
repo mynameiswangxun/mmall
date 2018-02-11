@@ -74,6 +74,8 @@ public class UserServiceImpl implements IUserService {
                 if(resultCount>0){
                     return ServerResponse.createErrorMessageResponse("用户邮箱已被注册");
                 }
+            }else {
+                return ServerResponse.createErrorMessageResponse("参数错误");
             }
         }else{
             return ServerResponse.createErrorMessageResponse("参数错误");
@@ -160,13 +162,32 @@ public class UserServiceImpl implements IUserService {
         updateUser.setEmail(user.getEmail());
         updateUser.setPhone(user.getPhone());
         updateUser.setQuestion(user.getQuestion());
-        updateUser.setQuestion(user.getQuestion());
+        updateUser.setAnswer(user.getAnswer());
 
         resultCount = userMapper.updateByPrimaryKeySelective(updateUser);
         if(resultCount>0){
             return ServerResponse.createSuccessMessageDataResponse("更新个人信息成功",updateUser);
         }
         return ServerResponse.createErrorMessageResponse("更新个人信息失败");
+    }
+
+    @Override
+    public ServerResponse<User> getInformation(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user==null){
+            return ServerResponse.createErrorMessageResponse("找不到当前用户");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createSuccessDataResponse(user);
+    }
+
+    @Override
+    public ServerResponse<String> checkAdminRole(User user) {
+        if(user!=null && user.getRole() == Const.Role.ROLE_ADMIN) {
+            return ServerResponse.createSuccessResponse();
+        }else {
+            return ServerResponse.createErrorResponse();
+        }
     }
 
 
