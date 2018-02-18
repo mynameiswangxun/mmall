@@ -19,9 +19,19 @@ public class Const {
         //管理员用户
         public static final int ROLE_ADMIN = 1;
     }
+
     public static class ProductListOrderBy{
         public static Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc","price_asc");
     }
+
+    public static class Cart{
+        public static int CHECKED = 1;
+        public static int UNCHECKED = 0;
+
+        public static String LIMIT_NUM_FAIL = "LIMIT_NUM_FAIL";
+        public static String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
+    }
+
     public enum ProductStatusEum {
         ON_SALE("上线", 1);
         private String value;
