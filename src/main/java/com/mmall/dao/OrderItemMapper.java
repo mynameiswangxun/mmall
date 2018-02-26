@@ -1,6 +1,5 @@
 package com.mmall.dao;
 
-import com.mmall.pojo.Order;
 import com.mmall.pojo.OrderItem;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +19,8 @@ public interface OrderItemMapper {
     int updateByPrimaryKey(OrderItem record);
 
     List<OrderItem> getByOrderNoAndUserId(@Param("orderNo") Long orderNo,@Param("userId") Integer userId);
+
+    int batchInsert(@Param("orderItemList") List<OrderItem> orderItemList);
+
+    List<OrderItem> getByOrderNo(Long orderNo);
 }

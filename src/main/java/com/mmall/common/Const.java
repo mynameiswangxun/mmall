@@ -51,6 +51,34 @@ public class Const {
         }
     }
 
+    public enum PaymentTypeEnum{
+        ONLINE_PAY("在线支付", 1);
+        private String value;
+        private int code;
+
+        PaymentTypeEnum(String value, int code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public static String getDesc(int code){
+            for (PaymentTypeEnum paymentTypeEnum:PaymentTypeEnum.values()){
+                if(code==paymentTypeEnum.getCode()){
+                    return paymentTypeEnum.value;
+                }
+            }
+            return "";
+        }
+    }
+
     public enum OrderStatusEumm{
         CANCEL(0,"已取消"),
         NOPAY(10,"未支付"),
@@ -73,7 +101,14 @@ public class Const {
             this.value = value;
             this.code = code;
         }
-
+        public static String getDesc(int code){
+            for (OrderStatusEumm orderStatusEumm:OrderStatusEumm.values()){
+                if(code==orderStatusEumm.getCode()){
+                    return orderStatusEumm.value;
+                }
+            }
+            return "";
+        }
 
     }
 
@@ -102,6 +137,15 @@ public class Const {
         PayPlatformEnum(int code,String value){
             this.value = value;
             this.code = code;
+        }
+
+        public static String getDesc(int code){
+            for (PayPlatformEnum payPlatformEnum:PayPlatformEnum.values()){
+                if(code==payPlatformEnum.getCode()){
+                    return payPlatformEnum.value;
+                }
+            }
+            return "";
         }
 
     }
