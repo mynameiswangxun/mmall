@@ -10,6 +10,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
 import com.mmall.vo.OrderVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/order/")
+@Slf4j
 public class OrderController {
-
-    private Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     IOrderService iOrderService;
@@ -71,7 +71,7 @@ public class OrderController {
             }
             params.put(name,valueStr);
         }
-        logger.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
+        log.info("支付宝回调,sign:{},trade_status:{},参数:{}",params.get("sign"),params.get("trade_status"),params.toString());
 
         try {
             boolean rsaCheckV1flag = AlipaySignature.rsaCheckV1(params, Configs.getAlipayPublicKey(),
@@ -79,11 +79,11 @@ public class OrderController {
             if(!rsaCheckV1flag){
                 System.out.println(Configs.getAlipayPublicKey());
                 System.out.println(Configs.getSignType());
-                logger.info("非法请求,验证不通过");
+                log.info("非法请求,验证不通过");
                 return ServerResponse.createErrorMessageResponse("非法请求,验证不通过");
             }
         } catch (AlipayApiException e) {
-            logger.error("支付宝验证回调异常",e);
+            log.error("支付宝验证回调异常",e);
         }
 
         //todo 验证各种数据
