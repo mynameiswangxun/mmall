@@ -369,7 +369,7 @@ public class OrderServiceImpl implements IOrderService {
                 .setNotifyUrl(PropertiesUtil.getProperty("alipay.callback.url"))
                 .setGoodsDetailList(goodsDetailList);
 
-        Configs.init("src/main/resources.beta/zfbinfo.properties");
+        Configs.init("zfbinfo.properties");
 
         /** 使用Configs提供的默认参数
          *  AlipayTradeService可以使用单例或者为静态成员对象，不需要反复new

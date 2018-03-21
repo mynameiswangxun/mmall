@@ -14,7 +14,7 @@ public class PropertiesUtil {
     private static Properties properties;
 
     static {
-        String fileName = "src/main/resources.beta/mmall.properties";
+            String fileName = "mmall.properties";
         properties = new Properties();
         try{
             properties.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName)));

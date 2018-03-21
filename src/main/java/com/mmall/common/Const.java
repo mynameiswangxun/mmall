@@ -13,6 +13,10 @@ public class Const {
 
     public static final String USERNAME = "username";
 
+    public static class RedisCacheExtime{
+        public static final int REDIS_SESSION_EXTIME = 60*30; //30min
+    }
+
     public static class Role{
         //普通用户
         public static final int ROLE_CUSTOMER = 0;
