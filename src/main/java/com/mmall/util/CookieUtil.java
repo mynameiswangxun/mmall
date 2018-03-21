@@ -14,6 +14,7 @@ public class CookieUtil {
 
     private final static String COOKIE_NAME = "mmall_login_token";
 
+    //坑:如果请求的url不符合COOKIE_DOMAIN则不会设置COOKIE
     public static void writeLoginToken(HttpServletResponse response,String token){
         Cookie cookie = new Cookie(COOKIE_NAME,token);
         cookie.setDomain(COOKIE_DOMAIN);

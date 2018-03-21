@@ -8,12 +8,14 @@ import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -45,13 +47,15 @@ public class UserController {
 
     /**
      * 用户注销
-     * @param session
+     * @param servletRequest
      * @return
      */
     @RequestMapping(value = "logout.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session){
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(HttpServletRequest servletRequest,HttpServletResponse servletResponse){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        CookieUtil.delLoginToken(servletRequest,servletResponse);
+        RedisPoolUtil.del(loginToken);
         return ServerResponse.createSuccessResponse();
     }
 
@@ -79,18 +83,23 @@ public class UserController {
     }
 
     /**
-     * 获取当前登录用户信息
-     * @param session
+     * 获取当前用户信息
+     * @param request
      * @return
      */
     @RequestMapping(value = "get_user_info.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if(user!=null){
-            return ServerResponse.createSuccessDataResponse(user);
+    public ServerResponse<User> getUserInfo(HttpServletRequest request){
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createErrorMessageResponse("用户未登录,无法获取当前用户的信息");
         }
-        return ServerResponse.createErrorMessageResponse("用户未登录,无法获取当前用户的信息");
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr,User.class);
+        if(user==null){
+            return ServerResponse.createErrorMessageResponse("登录信息已过期");
+        }
+        return ServerResponse.createSuccessDataResponse(user);
     }
 
     /**
