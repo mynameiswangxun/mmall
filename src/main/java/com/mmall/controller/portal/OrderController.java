@@ -9,8 +9,12 @@ import com.mmall.common.ResponceCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
 import com.mmall.vo.OrderVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +40,14 @@ public class OrderController {
 
     @RequestMapping("create.do")
     @ResponseBody
-    public ServerResponse create(HttpSession session, Integer shippingId){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse create(HttpServletRequest servletRequest , Integer shippingId){
+        //User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        if(StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createErrorMessageResponse("用户未登录,无法获取当前用户的信息");
+        }
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr,User.class);
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -46,8 +56,13 @@ public class OrderController {
 
     @RequestMapping("pay.do")
     @ResponseBody
-    public ServerResponse<Map<String,String>> pay(HttpSession session, Long orderNo, HttpServletRequest request){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<Map<String,String>> pay(HttpServletRequest servletRequest, Long orderNo, HttpServletRequest request){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -98,8 +113,13 @@ public class OrderController {
 
     @RequestMapping("query_order_pay_status.do")
     @ResponseBody
-    public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session, Long orderNo){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<Boolean> queryOrderPayStatus(HttpServletRequest servletRequest, Long orderNo){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -113,8 +133,13 @@ public class OrderController {
 
     @RequestMapping("cancel.do")
     @ResponseBody
-    public ServerResponse cancel(HttpSession session, Long orderNo){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse cancel(HttpServletRequest servletRequest, Long orderNo){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -123,8 +148,13 @@ public class OrderController {
 
     @RequestMapping("get_order_cart_product.do")
     @ResponseBody
-    public ServerResponse getOrderCartProduct(HttpSession session){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse getOrderCartProduct(HttpServletRequest servletRequest){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -133,8 +163,13 @@ public class OrderController {
 
     @RequestMapping("detail.do")
     @ResponseBody
-    public ServerResponse<OrderVo> detail(HttpSession session, Long orderNo){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<OrderVo> detail(HttpServletRequest servletRequest, Long orderNo){
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
@@ -143,10 +178,15 @@ public class OrderController {
 
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse<PageInfo> list(HttpSession session,
+    public ServerResponse<PageInfo> list(HttpServletRequest servletRequest,
                                          @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                          @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(servletRequest);
+        User user = null;
+        if(!StringUtils.isEmpty(loginToken)){
+            String userJsonStr = RedisPoolUtil.get(loginToken);
+            user = JsonUtil.string2Obj(userJsonStr,User.class);
+        }
         if (user==null){
             return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),ResponceCode.NEED_LOGIN.getDesc());
         }
