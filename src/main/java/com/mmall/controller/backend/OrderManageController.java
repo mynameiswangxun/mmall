@@ -23,85 +23,84 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/manage/order")
 public class OrderManageController {
 
-    @Autowired
-    IUserService iUserService;
+//    @Autowired
+//    IUserService iUserService;
 
     @Autowired
     IOrderService iOrderService;
 
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse<PageInfo> list(HttpServletRequest servletRequest,
-                                         @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                          @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize){
-        String loginToken = CookieUtil.readLoginToken(servletRequest);
-        User user = null;
-        if(!StringUtils.isEmpty(loginToken)){
-            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
-            user = JsonUtil.string2Obj(userJsonStr,User.class);
-        }
-        if(user==null){
-            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
-        }
-        if(!iUserService.checkAdminRole(user).isSuccess()) {
-            return ServerResponse.createErrorMessageResponse("用户权限不够");
-        }
+//        String loginToken = CookieUtil.readLoginToken(servletRequest);
+//        User user = null;
+//        if(!StringUtils.isEmpty(loginToken)){
+//            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
+//            user = JsonUtil.string2Obj(userJsonStr,User.class);
+//        }
+//        if(user==null){
+//            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
+//        }
+//        if(!iUserService.checkAdminRole(user).isSuccess()) {
+//            return ServerResponse.createErrorMessageResponse("用户权限不够");
+//        }
         return iOrderService.manageList(pageNum,pageSize);
     }
 
     @RequestMapping("detail.do")
     @ResponseBody
-    public ServerResponse<OrderVo> detail(HttpServletRequest servletRequest, Long orderNo){
-        String loginToken = CookieUtil.readLoginToken(servletRequest);
-        User user = null;
-        if(!StringUtils.isEmpty(loginToken)){
-            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
-            user = JsonUtil.string2Obj(userJsonStr,User.class);
-        }
-        if(user==null){
-            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
-        }
-        if(!iUserService.checkAdminRole(user).isSuccess()) {
-            return ServerResponse.createErrorMessageResponse("用户权限不够");
-        }
+    public ServerResponse<OrderVo> detail(Long orderNo){
+//        String loginToken = CookieUtil.readLoginToken(servletRequest);
+//        User user = null;
+//        if(!StringUtils.isEmpty(loginToken)){
+//            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
+//            user = JsonUtil.string2Obj(userJsonStr,User.class);
+//        }
+//        if(user==null){
+//            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
+//        }
+//        if(!iUserService.checkAdminRole(user).isSuccess()) {
+//            return ServerResponse.createErrorMessageResponse("用户权限不够");
+//        }
         return iOrderService.manageDetail(orderNo);
     }
 
     @RequestMapping("search.do")
     @ResponseBody
-    public ServerResponse<PageInfo> search(HttpServletRequest servletRequest, Long orderNo,
+    public ServerResponse<PageInfo> search(Long orderNo,
                                           @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                           @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize){
-        String loginToken = CookieUtil.readLoginToken(servletRequest);
-        User user = null;
-        if(!StringUtils.isEmpty(loginToken)){
-            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
-            user = JsonUtil.string2Obj(userJsonStr,User.class);
-        }
-        if(user==null){
-            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
-        }
-        if(!iUserService.checkAdminRole(user).isSuccess()) {
-            return ServerResponse.createErrorMessageResponse("用户权限不够");
-        }
+//        String loginToken = CookieUtil.readLoginToken(servletRequest);
+//        User user = null;
+//        if(!StringUtils.isEmpty(loginToken)){
+//            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
+//            user = JsonUtil.string2Obj(userJsonStr,User.class);
+//        }
+//        if(user==null){
+//            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
+//        }
+//        if(!iUserService.checkAdminRole(user).isSuccess()) {
+//            return ServerResponse.createErrorMessageResponse("用户权限不够");
+//        }
         return iOrderService.manageSearch(orderNo,pageNum,pageSize);
     }
 
     @RequestMapping("send_goods.do")
     @ResponseBody
-    public ServerResponse sendGoods(HttpServletRequest servletRequest, Long orderNo){
-        String loginToken = CookieUtil.readLoginToken(servletRequest);
-        User user = null;
-        if(!StringUtils.isEmpty(loginToken)){
-            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
-            user = JsonUtil.string2Obj(userJsonStr,User.class);
-        }
-        if(user==null){
-            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
-        }
-        if(!iUserService.checkAdminRole(user).isSuccess()) {
-            return ServerResponse.createErrorMessageResponse("用户权限不够");
-        }
+    public ServerResponse sendGoods(Long orderNo){
+//        String loginToken = CookieUtil.readLoginToken(servletRequest);
+//        User user = null;
+//        if(!StringUtils.isEmpty(loginToken)){
+//            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
+//            user = JsonUtil.string2Obj(userJsonStr,User.class);
+//        }
+//        if(user==null){
+//            return ServerResponse.createErrorcodeMessageResponse(ResponceCode.NEED_LOGIN.getCode(),"用户未登录");
+//        }
+//        if(!iUserService.checkAdminRole(user).isSuccess()) {
+//            return ServerResponse.createErrorMessageResponse("用户权限不够");
+//        }
         return iOrderService.manageSendGoods(orderNo);
     }
 
