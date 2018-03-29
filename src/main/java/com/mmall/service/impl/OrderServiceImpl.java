@@ -28,6 +28,8 @@ import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -534,5 +536,30 @@ public class OrderServiceImpl implements IOrderService {
             return ServerResponse.createErrorMessageResponse("发货失败");
         }
         return ServerResponse.createSuccessMessageResponse("发货成功");
+    }
+
+    @Override
+    public void closeOrder(int hour) {
+        Date closeDateTime = DateUtils.addHours(new Date(),-hour);
+        List<Order> orderList = orderMapper.selectOrderStatusByCreateTime(Const.OrderStatusEumm.NOPAY.getCode(),DateTimeUtil.dateToStr(closeDateTime));
+        for (Order order:orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+            for (OrderItem orderItem:orderItemList) {
+                //当前读,乐观锁,一定用确定的主键where条件,防止加表锁,InnoDB引擎
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+
+                //如果商品被删除了
+                if(stock==null){
+                    continue;
+                }
+
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock+orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            orderMapper.closeOrderByOrderId(order.getId());
+            log.info("关闭订单OrderNo:{}",order.getOrderNo());
+        }
     }
 }

@@ -145,14 +145,17 @@ public class Const {
             this.code = code;
         }
 
-        public static String getDesc(int code){
-            for (PayPlatformEnum payPlatformEnum:PayPlatformEnum.values()){
-                if(code==payPlatformEnum.getCode()){
+        public static String getDesc(int code) {
+            for (PayPlatformEnum payPlatformEnum : PayPlatformEnum.values()) {
+                if (code == payPlatformEnum.getCode()) {
                     return payPlatformEnum.value;
                 }
             }
             return "";
         }
-
+    }
+    public interface REDIS_LOCK{
+        //fenbushisuo
+        String CLOSE_ORDER_TASK_LOCK = "CLOSE_ORDER_TASK_LOCK";
     }
 }
