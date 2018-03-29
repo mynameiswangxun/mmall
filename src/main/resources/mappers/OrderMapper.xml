@@ -236,7 +236,7 @@
   </update>
     <update id="closeOrderByOrderId" parameterType="int">
         UPDATE mmall_order
-        SELECT status=0
+        SET status=0
         WHERE id=#{id}
     </update>
 </mapper>
