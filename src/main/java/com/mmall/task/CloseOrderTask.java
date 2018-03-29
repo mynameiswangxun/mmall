@@ -62,6 +62,7 @@ public class CloseOrderTask {
             //如果发现当前锁存在并且已经过期
             if(lockValueStr!=null && System.currentTimeMillis()>Long.parseLong(lockValueStr)){
                 //尝试抢占锁
+                log.info("发现锁过期，开始抢占锁");
                 String getSetRes = RedisShardedPoolUtil.getSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
                         Long.toString(System.currentTimeMillis()+lockTimeout));
                 //情况一：getSetRes==null，锁已被释放，故成功抢占到锁
