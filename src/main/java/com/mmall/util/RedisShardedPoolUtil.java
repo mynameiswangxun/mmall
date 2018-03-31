@@ -121,14 +121,10 @@ public class RedisShardedPoolUtil {
 
     public static void main(String[] args) {
 
-        RedisShardedPoolUtil.set("key","value");
-        String value = RedisShardedPoolUtil.get("key");
-        System.out.println(value);
-        RedisShardedPoolUtil.setEx("keyex","value",20);
-        RedisShardedPoolUtil.expire("key",30);
-        RedisShardedPoolUtil.del("wangxun");
+        for(int i=0;i<10;i++){
+            System.out.println(get("key"+i));
+        }
 
-        System.out.println("end");
     }
 
 }
