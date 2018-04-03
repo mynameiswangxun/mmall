@@ -13,6 +13,12 @@ public class Const {
 
     public static final String USERNAME = "username";
 
+    public static final String TOKEN_PREFIX = "token_";
+
+    public static class RedisCacheExtime{
+        public static final int REDIS_SESSION_EXTIME = 60*30; //30min
+    }
+
     public static class Role{
         //普通用户
         public static final int ROLE_CUSTOMER = 0;
@@ -139,14 +145,17 @@ public class Const {
             this.code = code;
         }
 
-        public static String getDesc(int code){
-            for (PayPlatformEnum payPlatformEnum:PayPlatformEnum.values()){
-                if(code==payPlatformEnum.getCode()){
+        public static String getDesc(int code) {
+            for (PayPlatformEnum payPlatformEnum : PayPlatformEnum.values()) {
+                if (code == payPlatformEnum.getCode()) {
                     return payPlatformEnum.value;
                 }
             }
             return "";
         }
-
+    }
+    public interface REDIS_LOCK{
+        //fenbushisuo
+        String CLOSE_ORDER_TASK_LOCK = "CLOSE_ORDER_TASK_LOCK";
     }
 }
